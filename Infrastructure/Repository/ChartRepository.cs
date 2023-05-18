@@ -39,12 +39,30 @@ namespace Infrastructure.Repository
 
         public async Task<IEnumerable<Chart>> GetAllAsync()
         {
-            return await _chartDb.ToListAsync();
+            return await _chartDb.Include(x => x.Player)
+                .AsNoTracking()
+                .OrderBy(x => x.PositionId)
+                .ThenBy(x => x.Depth)
+                .ToListAsync();
         }
 
         public async Task<Chart> GetAsync(Guid id)
         {
             return await _chartDb.SingleOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<IEnumerable<Chart>> GetBackupsAsync(string position, int playerNumber, string group)
+        {
+            var chart = await _chartDb.FirstOrDefaultAsync(x => x.PositionId == position &&
+                x.PlayerNumber == playerNumber && x.Group == group);
+            if (chart == null) return Enumerable.Empty<Chart>();
+
+            var charts = await _chartDb.Where(x => x.PositionId == position &&
+                x.Group == group && x.Depth >= chart.Depth)
+                .OrderBy(x => x.Depth)
+                .ToListAsync();
+
+            return charts;
         }
 
         public async Task<Chart> GetByPlayerAndPositionAsync(int playerNumber, string position, string group)

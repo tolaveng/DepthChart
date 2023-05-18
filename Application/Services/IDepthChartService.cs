@@ -6,9 +6,9 @@ namespace Application.Services
 {
     public interface IDepthChartService
     {
-        Task<bool> AddPlayerToDepthChart(string position, PlayerDto player, int? depth);
-        Task<bool> RemovePlayerFromDepthChart(string position, PlayerDto player);
-        Task<IEnumerable<PlayerDto>> GetBackups(string position);
-        Task<IEnumerable<PlayerDto>> GetFullDepthChart();
+        Task<bool> AddPlayerToDepthChartAsync(string position, PlayerDto player, int? depth);
+        Task<PlayerDto> RemovePlayerFromDepthChartAsync(string position, PlayerDto player);
+        Task<IEnumerable<ChartDto>> GetBackupsAsync(string position, PlayerDto player);
+        Task<IEnumerable<ChartDto>> GetFullDepthChartAsync();
     }
 }

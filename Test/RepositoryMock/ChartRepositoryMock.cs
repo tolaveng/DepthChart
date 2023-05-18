@@ -51,14 +51,14 @@ namespace Test.RepositoryMock
                 });
 
             repo.Setup(x => x.GetLastPositionAsync(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(async (string position, string group) =>
+                .ReturnsAsync((string position, string group) =>
                 {
                     return charts.Where(x => x.PositionId == position && x.Group == group)
                     .OrderBy(x => x.Depth).LastOrDefault();
                 });
 
             repo.Setup(x => x.ShiftDepthAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(async (string position, string group, int depth) =>
+                .Returns(async(string position, string group, int depth) =>
                 {
                     var orderedCharts = charts
                         .Where(x => x.Group == group && x.PositionId == position)
@@ -72,13 +72,23 @@ namespace Test.RepositoryMock
                     {
                         chart.Depth += 1;
                     }
+                    await Task.FromResult(0);
                 });
 
             repo.Setup(x => x.GetByPlayerAndPositionAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(async (int playerNumber, string position, string group) =>
+                .ReturnsAsync((int playerNumber, string position, string group) =>
                 {
                     return charts
                         .FirstOrDefault(x => x.Group == group && x.PositionId == position && x.PlayerNumber == playerNumber);
+                });
+
+            repo.Setup(x => x.DeleteAsync(It.IsAny<Guid>()))
+                .ReturnsAsync((Guid id) =>
+                {
+                    var chart = charts.SingleOrDefault(x => x.Id == id);
+                    if (chart == null) return false;
+                    charts.Remove(chart);
+                    return true;
                 });
 
             return repo;

@@ -1,6 +1,8 @@
 ﻿using Application.IRepository;
+using Application.Mapper;
 using Application.Models;
 using Application.Services;
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +20,20 @@ namespace Test
         private readonly IPlayerRepository _playerRepo;
         private readonly IPositionRepository _positionRepo;
         private readonly IChartRepository _chartRepo;
-
+        private readonly IMapper _mapper;
         public DepthChartServiceTests()
         {
+            var mappingConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+            _mapper = mappingConfig.CreateMapper();
+
             _playerRepo = PlayerRepositoryMock.GetRepository().Object;
             _positionRepo = PositionRepositoryMock.GetRepository().Object;
             _chartRepo = ChartRepositoryMock.GetRepository().Object;
-            _depthChartService = new DepthChartService(_playerRepo, _positionRepo, _chartRepo);
+
+            _depthChartService = new DepthChartService(_playerRepo, _positionRepo, _chartRepo, _mapper);
         }
 
         [Fact]
@@ -35,7 +44,7 @@ namespace Test
                 Number = 12, Name = "Tom Brady", TeamId = 0
             };
 
-            var result = await _depthChartService.AddPlayerToDepthChart("QB", tomBrady, null);
+            var result = await _depthChartService.AddPlayerToDepthChartAsync("QB", tomBrady, null);
             var allCharts = await _chartRepo.GetAllAsync();
             var lastDepth = allCharts.OrderBy(x => x.Depth).Last().Depth;
 
@@ -53,7 +62,7 @@ namespace Test
                 TeamId = 0
             };
 
-            var result = await _depthChartService.AddPlayerToDepthChart("QB", player, 0);
+            var result = await _depthChartService.AddPlayerToDepthChartAsync("QB", player, 0);
             var allCharts = (await _chartRepo.GetAllAsync()).OrderBy(x => x.Depth);
             var firstChart = allCharts.First();
             var lastChart = allCharts.Last();
@@ -74,7 +83,7 @@ namespace Test
                 TeamId = 1
             };
 
-            var result = await _depthChartService.AddPlayerToDepthChart("QB", player, 2);
+            var result = await _depthChartService.AddPlayerToDepthChartAsync("QB", player, 2);
             var allCharts = await _chartRepo.GetAllAsync();
             var chart = allCharts.FirstOrDefault(x => x.PositionId == "QB" && x.PlayerNumber == 22);
             var lastDepth = allCharts.OrderBy(x => x.Depth).Last().Depth;
@@ -83,6 +92,36 @@ namespace Test
             Assert.NotNull(chart);
             Assert.Equal(2, chart.Depth);
             Assert.Equal(3, lastDepth);
+        }
+
+        [Fact]
+        public async void ChartService_Remove_Player_Should_Succeeded()
+        {
+            var player = new PlayerDto()
+            {
+                Number = 1,
+                Name = "First Player",
+                TeamId = 0
+            };
+            
+            var result = await _depthChartService.RemovePlayerFromDepthChartAsync("QB", player);
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async void ChartService_Remove_Player_Should_Failed()
+        {
+            var player = new PlayerDto()
+            {
+                Number = 111,
+                Name = "No Player",
+                TeamId = 0
+            };
+
+            var result = await _depthChartService.RemovePlayerFromDepthChartAsync("QB", player);
+
+            Assert.Null(result);
         }
     }
 }

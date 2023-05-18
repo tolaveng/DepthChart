@@ -22,7 +22,7 @@
 ```
 
 ### Assumptions
-- all players are add to Offense, (default Group)
+- all players are add to Offense, (make a default constant Group)
 - a player can play for only one team
 - No transaction and rollback have been implemented
 - No race condition
