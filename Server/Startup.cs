@@ -1,4 +1,7 @@
+using Application.IRepository;
+using Application.Mapper;
 using Infrastructure.Database;
+using Infrastructure.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,9 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Server
 {
@@ -29,6 +30,12 @@ namespace Server
         public void ConfigureServices(IServiceCollection services)
         {
             AddDatabase(services);
+            
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(AutoMapperProfile)));
+
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddScoped<IChartRepository, ChartRepository>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -49,6 +56,7 @@ namespace Server
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthorization();
 
