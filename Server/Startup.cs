@@ -1,7 +1,9 @@
+using Infrastructure.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,7 +28,7 @@ namespace Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            AddDatabase(services);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -54,6 +56,23 @@ namespace Server
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void AddDatabase(IServiceCollection services)
+        {
+            services.AddOptions();
+            var databaseSetting = Configuration.GetSection("DatabaseSetting");
+            services.Configure<DatabaseSetting>(databaseSetting);
+            var connectionString = DatabaseConnection.GetConnectionString(databaseSetting.Get<DatabaseSetting>());
+            services.AddPooledDbContextFactory<AppDbContext>(opt => {
+                Console.WriteLine(connectionString);
+                opt.UseSqlServer(connectionString);
+            });
+
+            //services.AddDbContext<AppDbContext>();
+            services.AddScoped<AppDbContext>(x =>
+                x.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContext()
+            );
         }
     }
 }
