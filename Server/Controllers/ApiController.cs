@@ -2,6 +2,7 @@
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Server.Controllers
@@ -27,7 +28,7 @@ namespace Server.Controllers
         public async Task<IActionResult> GetFullDepthChart()
         {
             var results = await _depthChartService.GetFullDepthChartAsync();
-            return Ok(results);
+            return Ok(results.Select(ChartResponse.FromData));
         }
 
         [HttpGet("getBackups")]
@@ -39,7 +40,7 @@ namespace Server.Controllers
             }
             var playerDto = new PlayerDto { Number = playerNumber };
             var results = await _depthChartService.GetBackupsAsync(position, playerDto);
-            return Ok(results);
+            return Ok(results.Select(ChartResponse.FromData));
         }
 
         [HttpPost("getBackups")]
@@ -47,7 +48,7 @@ namespace Server.Controllers
         {
             var playerDto = new PlayerDto { Number = request.Player.Number, Name = request.Player.Name };
             var results = await _depthChartService.GetBackupsAsync(request.Position, playerDto);
-            return Ok(results);
+            return Ok(results.Select(ChartResponse.FromData));
         }
 
         [HttpPost("addPlayerToDepthChart")]

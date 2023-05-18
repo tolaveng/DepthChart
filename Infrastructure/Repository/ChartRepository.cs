@@ -53,12 +53,13 @@ namespace Infrastructure.Repository
 
         public async Task<IEnumerable<Chart>> GetBackupsAsync(string position, int playerNumber, string group)
         {
-            var chart = await _chartDb.FirstOrDefaultAsync(x => x.PositionId == position &&
+            var chart = await _chartDb.FirstOrDefaultAsync(x => x.PositionId.ToUpper() == position.ToUpper() &&
                 x.PlayerNumber == playerNumber && x.Group == group);
             if (chart == null) return Enumerable.Empty<Chart>();
 
-            var charts = await _chartDb.Where(x => x.PositionId == position &&
-                x.Group == group && x.Depth >= chart.Depth)
+            var charts = await _chartDb.Include(x => x.Player)
+                .Where(x => x.PositionId.ToUpper() == position.ToUpper() &&
+                x.Group == group && x.Depth > chart.Depth)
                 .OrderBy(x => x.Depth)
                 .ToListAsync();
 
@@ -68,7 +69,7 @@ namespace Infrastructure.Repository
         public async Task<Chart> GetByPlayerAndPositionAsync(int playerNumber, string position, string group)
         {
             return await _chartDb.FirstOrDefaultAsync(x => 
-                x.PositionId == position &&
+                x.PositionId.ToUpper() == position.ToUpper() &&
                 x.PlayerNumber == playerNumber &&
                 x.Group == group);
         }
@@ -80,7 +81,7 @@ namespace Infrastructure.Repository
 
         public async Task<Chart> GetLastPositionAsync(string position, string group)
         {
-            return await _chartDb.Where(x => x.PositionId == position && x.Group == group)
+            return await _chartDb.Where(x => x.PositionId.ToUpper() == position.ToUpper() && x.Group == group)
                 .OrderByDescending(x => x.Depth).FirstAsync();
         }
 
@@ -88,6 +89,7 @@ namespace Infrastructure.Repository
         {
             try
             {
+                chart.PositionId = chart.PositionId.ToUpper();
                 var result = await _chartDb.AddAsync(chart);
                 var added = result.State == EntityState.Added;
                 await _dbContext.SaveChangesAsync();
@@ -101,7 +103,7 @@ namespace Infrastructure.Repository
         public async Task ShiftDepthAsync(string position, string group, int depth)
         {
             var charts = await _chartDb
-                .Where(x => x.Group == group && x.PositionId == position)
+                .Where(x => x.Group == group && x.PositionId.ToUpper() == position.ToUpper())
                 .OrderBy(x => x.Depth).ToArrayAsync();
 
             if (!charts.Any()) return;
