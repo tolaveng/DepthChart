@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230518095502_InitDataTables")]
+    [Migration("20230518210715_InitDataTables")]
     partial class InitDataTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,9 +51,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Player", b =>
                 {
                     b.Property<int>("Number")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

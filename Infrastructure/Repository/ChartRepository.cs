@@ -89,8 +89,9 @@ namespace Infrastructure.Repository
             try
             {
                 var result = await _chartDb.AddAsync(chart);
+                var added = result.State == EntityState.Added;
                 await _dbContext.SaveChangesAsync();
-                return await Task.FromResult(result.State == EntityState.Added);
+                return await Task.FromResult(added);
             } catch (Exception)
             {
                 return false;

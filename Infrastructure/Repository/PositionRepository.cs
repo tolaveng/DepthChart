@@ -19,16 +19,18 @@ namespace Infrastructure.Repository
 
         public async Task<Position> GetAsync(string position)
         {
-            return await _db.SingleOrDefaultAsync(x => x.Id == position);
+            return await _db.SingleOrDefaultAsync(x => x.Id.ToUpper() == position.ToUpper());
         }
 
         public async Task<bool> InsertAsync(Position position)
         {
             try
             {
+                position.Id = position.Id.ToUpper();
                 var result = await _db.AddAsync(position);
+                var added = result.State == EntityState.Added;
                 await _dbContext.SaveChangesAsync();
-                return await Task.FromResult(result.State == EntityState.Added);
+                return await Task.FromResult(added);
 
             }
             catch (Exception)
