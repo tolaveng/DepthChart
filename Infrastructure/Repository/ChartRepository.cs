@@ -28,6 +28,7 @@ namespace Infrastructure.Repository
             try
             {
                 _chartDb.Remove(chart);
+                await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -62,6 +63,7 @@ namespace Infrastructure.Repository
             try
             {
                 var result = await _chartDb.AddAsync(chart);
+                await _dbContext.SaveChangesAsync();
                 return await Task.FromResult(result.State == EntityState.Added);
             } catch (Exception)
             {
@@ -69,9 +71,21 @@ namespace Infrastructure.Repository
             }
         }
 
-        public Task<bool> ShiftDepthAsync(string position, string group, int depth)
+        public async Task ShiftDepthAsync(string position, string group, int depth)
         {
-            throw new NotImplementedException();
+            var charts = await _chartDb
+                .Where(x => x.Group == group && x.PositionId == position && x.Depth >= depth)
+                .OrderBy(x => x.Depth)
+                .ToArrayAsync();
+
+            if (!charts.Any()) return;
+
+            foreach (var chart in charts)
+            {
+                chart.Depth += 1;
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<bool> UpdateAsync(Chart chart)
@@ -80,6 +94,7 @@ namespace Infrastructure.Repository
             {
                 _chartDb.Attach(chart);
                 _dbContext.Entry(chart).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception)

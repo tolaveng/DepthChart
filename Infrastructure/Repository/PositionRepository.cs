@@ -27,6 +27,7 @@ namespace Infrastructure.Repository
             try
             {
                 var result = await _db.AddAsync(position);
+                await _dbContext.SaveChangesAsync();
                 return await Task.FromResult(result.State == EntityState.Added);
 
             }

@@ -27,6 +27,7 @@ namespace Infrastructure.Repository
             try
             {
                 _db.Remove(player);
+                await _dbContext.SaveChangesAsync();
                 return true;
             } catch (Exception)
             {
@@ -49,6 +50,7 @@ namespace Infrastructure.Repository
             try
             {
                 var result = await _db.AddAsync(player);
+                await _dbContext.SaveChangesAsync();
                 return await Task.FromResult(result.State == EntityState.Added);
 
             } catch (Exception)
@@ -63,6 +65,7 @@ namespace Infrastructure.Repository
             {
                 _db.Attach(player);
                 _dbContext.Entry(player).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
                 return true;
             } catch (Exception)
             {

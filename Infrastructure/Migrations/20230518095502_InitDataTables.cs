@@ -14,7 +14,6 @@ namespace Infrastructure.Migrations
                     Number = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PositionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TeamId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -54,7 +53,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SportId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SportId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,6 +86,16 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Sports",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "NFL" });
+
+            migrationBuilder.InsertData(
+                table: "Teams",
+                columns: new[] { "Id", "Name", "SportId" },
+                values: new object[] { 1, "Tampa Bay Buccaneers", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Charts_PlayerNumber",

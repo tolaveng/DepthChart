@@ -37,7 +37,7 @@ namespace Server
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IChartRepository, ChartRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();
-            services.AddScoped<IDepthChart, DepthChart>();
+            services.AddScoped<IDepthChartService, DepthChartService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

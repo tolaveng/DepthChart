@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230518081033_InitDataTables")]
+    [Migration("20230518095502_InitDataTables")]
     partial class InitDataTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,9 +58,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PositionId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
 
@@ -95,6 +92,13 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sports");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "NFL"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Team", b =>
@@ -107,12 +111,20 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SportId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SportId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Teams");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Tampa Bay Buccaneers",
+                            SportId = 1
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Chart", b =>
