@@ -4,19 +4,17 @@ using Domain.Contants;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class DepthChart : IDepthChart
+    public class DepthChartService : IDepthChartService
     {
         private readonly IPlayerRepository playerRepo;
         private readonly IPositionRepository positionRepo;
         private readonly IChartRepository chartRepo;
 
-        public DepthChart(IPlayerRepository playerRepository, IPositionRepository positionRepository, IChartRepository chartRepository)
+        public DepthChartService(IPlayerRepository playerRepository, IPositionRepository positionRepository, IChartRepository chartRepository)
         {
             playerRepo = playerRepository;
             positionRepo = positionRepository;
@@ -25,6 +23,9 @@ namespace Application.Services
 
         public async Task<bool> AddPlayerToDepthChart(string position, PlayerDto playerDto, int? depth)
         {
+            var existingChart = await chartRepo.GetByPlayerAndPositionAsync(playerDto.Number, position, DefaultConstants.DefaultGroup);
+            if (existingChart != null) return true; // Assume for idempotent
+
             var pos = await positionRepo.GetAsync(position);
             if (pos == null)
             {
@@ -45,7 +46,6 @@ namespace Application.Services
                 {
                     Number = playerDto.Number,
                     Name = playerDto.Name,
-                    PositionId = position,
                     TeamId = 1
                 };
                 var inserted = await playerRepo.InsertAsync(player);
@@ -63,7 +63,7 @@ namespace Application.Services
             };
 
             // if position depth is not defined, add to the end of the depth
-            if (depth.HasValue || depth == 0)
+            if (!depth.HasValue)
             {
                 var lastPos = await chartRepo.GetLastPositionAsync(position, DefaultConstants.DefaultGroup);
                 newChart.Depth = lastPos.Depth + 1;
@@ -74,7 +74,6 @@ namespace Application.Services
             }
 
             var result = await chartRepo.InsertAsync(newChart);
-
             return result;
         }
 

@@ -14,6 +14,8 @@ namespace Application.IRepository
         Task<bool> UpdateAsync(Chart chart);
         Task<bool> DeleteAsync(Guid id);
         Task<Chart> GetLastPositionAsync(string position, string group);
-        Task<bool> ShiftDepthAsync(string position, string group, int depth);
+        Task ShiftDepthAsync(string position, string group, int depth);
+
+        Task<Chart> GetByPlayerAndPositionAsync(int playerNumber, string position, string group);
     }
 }

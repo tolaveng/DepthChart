@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public interface IDepthChart
+    public interface IDepthChartService
     {
         Task<bool> AddPlayerToDepthChart(string position, PlayerDto player, int? depth);
         Task<bool> RemovePlayerFromDepthChart(string position, PlayerDto player);

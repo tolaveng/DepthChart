@@ -47,6 +47,14 @@ namespace Infrastructure.Repository
             return await _chartDb.SingleOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Chart> GetByPlayerAndPositionAsync(int playerNumber, string position, string group)
+        {
+            return await _chartDb.FirstOrDefaultAsync(x => 
+                x.PositionId == position &&
+                x.PlayerNumber == playerNumber &&
+                x.Group == group);
+        }
+
         public async Task<Chart> GetByPlayerNumberAsync(int playerNumber)
         {
             return await _chartDb.FirstOrDefaultAsync(x => x.PlayerNumber == playerNumber);
@@ -74,13 +82,16 @@ namespace Infrastructure.Repository
         public async Task ShiftDepthAsync(string position, string group, int depth)
         {
             var charts = await _chartDb
-                .Where(x => x.Group == group && x.PositionId == position && x.Depth >= depth)
-                .OrderBy(x => x.Depth)
-                .ToArrayAsync();
+                .Where(x => x.Group == group && x.PositionId == position)
+                .OrderBy(x => x.Depth).ToArrayAsync();
 
             if (!charts.Any()) return;
 
-            foreach (var chart in charts)
+            if (!charts.Any(x => x.Depth == depth)) return;
+
+            var shiftChart = charts.Where(x => x.Depth >= depth);
+
+            foreach (var chart in shiftChart)
             {
                 chart.Depth += 1;
             }
