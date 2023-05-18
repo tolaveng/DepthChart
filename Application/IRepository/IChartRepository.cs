@@ -13,5 +13,7 @@ namespace Application.IRepository
         Task<bool> InsertAsync(Chart chart);
         Task<bool> UpdateAsync(Chart chart);
         Task<bool> DeleteAsync(Guid id);
+        Task<Chart> GetLastPositionAsync(string position, string group);
+        Task<bool> ShiftDepthAsync(string position, string group, int depth);
     }
 }

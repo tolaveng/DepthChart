@@ -22,7 +22,11 @@
 ```
 
 ### Assumptions
+- all players are add to Offense, (default Group)
 - a player can play for only one team
+- No transaction and rollback have been implemented
+- No race condition
+
 ### Questions
 - Who is a player in team A at positon LT?
 

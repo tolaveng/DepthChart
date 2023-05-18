@@ -14,7 +14,8 @@ namespace Infrastructure.Migrations
                     Number = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PositionId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PositionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TeamId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,7 +67,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PlayerNumber = table.Column<int>(type: "int", nullable: false),
-                    TeamId = table.Column<int>(type: "int", nullable: false),
+                    Group = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PositionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Depth = table.Column<int>(type: "int", nullable: false)
                 },
@@ -85,12 +86,6 @@ namespace Infrastructure.Migrations
                         principalTable: "Positions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Charts_Teams_TeamId",
-                        column: x => x.TeamId,
-                        principalTable: "Teams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -102,11 +97,6 @@ namespace Infrastructure.Migrations
                 name: "IX_Charts_PositionId",
                 table: "Charts",
                 column: "PositionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Charts_TeamId",
-                table: "Charts",
-                column: "TeamId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -118,13 +108,13 @@ namespace Infrastructure.Migrations
                 name: "Sports");
 
             migrationBuilder.DropTable(
+                name: "Teams");
+
+            migrationBuilder.DropTable(
                 name: "Players");
 
             migrationBuilder.DropTable(
                 name: "Positions");
-
-            migrationBuilder.DropTable(
-                name: "Teams");
         }
     }
 }

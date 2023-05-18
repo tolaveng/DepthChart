@@ -51,6 +51,12 @@ namespace Infrastructure.Repository
             return await _chartDb.FirstOrDefaultAsync(x => x.PlayerNumber == playerNumber);
         }
 
+        public async Task<Chart> GetLastPositionAsync(string position, string group)
+        {
+            return await _chartDb.Where(x => x.PositionId == position && x.Group == group)
+                .OrderByDescending(x => x.Depth).FirstAsync();
+        }
+
         public async Task<bool> InsertAsync(Chart chart)
         {
             try
@@ -61,6 +67,11 @@ namespace Infrastructure.Repository
             {
                 return false;
             }
+        }
+
+        public Task<bool> ShiftDepthAsync(string position, string group, int depth)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> UpdateAsync(Chart chart)

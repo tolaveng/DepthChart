@@ -9,6 +9,7 @@ namespace Domain.Entities
         public int Number { get; set; }
         public string Name { get; set; }
         public string PositionId { get; set; }
+        public int TeamId { get; set; }
 
         public virtual ICollection<Chart> Charts { get; set; }
     }

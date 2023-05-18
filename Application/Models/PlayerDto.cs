@@ -11,6 +11,7 @@ namespace Application.Models
         public int Number { get; set; }
         public string Name { get; set; }
         public string PositionId { get; set; }
+        public int TeamId { get; set; }
 
         public virtual ICollection<ChartDto> Charts { get; set; }
     }

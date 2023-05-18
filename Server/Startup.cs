@@ -1,5 +1,6 @@
 using Application.IRepository;
 using Application.Mapper;
+using Application.Services;
 using Infrastructure.Database;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +36,8 @@ namespace Server
 
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IChartRepository, ChartRepository>();
+            services.AddScoped<IPositionRepository, PositionRepository>();
+            services.AddScoped<IDepthChart, DepthChart>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

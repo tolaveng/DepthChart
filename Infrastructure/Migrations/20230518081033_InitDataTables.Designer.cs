@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230518003502_InitDataTables")]
+    [Migration("20230518081033_InitDataTables")]
     partial class InitDataTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,22 +30,20 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Depth")
                         .HasColumnType("int");
 
+                    b.Property<string>("Group")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PlayerNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("PositionId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PlayerNumber");
 
                     b.HasIndex("PositionId");
-
-                    b.HasIndex("TeamId");
 
                     b.ToTable("Charts");
                 });
@@ -62,6 +60,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("PositionId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeamId")
+                        .HasColumnType("int");
 
                     b.HasKey("Number");
 
@@ -126,17 +127,9 @@ namespace Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("PositionId");
 
-                    b.HasOne("Domain.Entities.Team", "Team")
-                        .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Player");
 
                     b.Navigation("Position");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("Domain.Entities.Player", b =>

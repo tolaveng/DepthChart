@@ -19,7 +19,6 @@ namespace Infrastructure.Database
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Chart>().HasOne(x => x.Player).WithMany(x => x.Charts).HasForeignKey(x => x.PlayerNumber);
-            modelBuilder.Entity<Chart>().HasOne(x => x.Team).WithMany().HasForeignKey(x => x.TeamId);
             modelBuilder.Entity<Chart>().HasOne(x => x.Position).WithMany().HasForeignKey(x => x.PositionId);
         }
     }
