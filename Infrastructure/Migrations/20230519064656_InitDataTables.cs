@@ -87,6 +87,16 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Players",
+                columns: new[] { "Number", "Name", "TeamId" },
+                values: new object[] { 1, "Test Player", 0 });
+
+            migrationBuilder.InsertData(
+                table: "Positions",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { "OLB", "OLB" });
+
+            migrationBuilder.InsertData(
                 table: "Sports",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 1, "NFL" });
@@ -95,6 +105,11 @@ namespace Infrastructure.Migrations
                 table: "Teams",
                 columns: new[] { "Id", "Name", "SportId" },
                 values: new object[] { 1, "Tampa Bay Buccaneers", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Charts",
+                columns: new[] { "Id", "Depth", "Group", "PlayerNumber", "PositionId" },
+                values: new object[] { new Guid("0323dab0-4be8-4db0-a28e-79f41138c3ea"), 0, "Offense", 1, "OLB" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Charts_PlayerNumber",

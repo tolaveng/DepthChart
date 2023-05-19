@@ -24,6 +24,9 @@ namespace Infrastructure.Database
 
             modelBuilder.ApplyConfiguration(new SportSeeder());
             modelBuilder.ApplyConfiguration(new TeamSeeder());
+            modelBuilder.ApplyConfiguration(new PositionSeeder());
+            modelBuilder.ApplyConfiguration(new PlayerSeeder());
+            modelBuilder.ApplyConfiguration(new ChartSeeder());
         }
     }
 }
