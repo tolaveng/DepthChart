@@ -4,6 +4,7 @@
     - a console application (NOT IMPLEMENT YET) to allow user to add/remove/display the depth chart.
     
 # Run Project
+	We can run the project in Docker or dotnet CLI
 ## Using Docker
 - This project contains the Dockerfile and docker-compose.yml in the solution directory
 - Go to the solution directory, and run command in PowerShell or Shell
@@ -88,6 +89,8 @@ i.e: http://localhost:5000/swagger/index.html
 > dotnet run --project Client/Client.csproj
 ```
 
+# Class Diagram
+![Class Diagram](Images/Class-Diagram.png)
 
 # Troubleshoot
 ### Docker
@@ -131,12 +134,3 @@ i.e: http://localhost:5000/swagger/index.html
 
 - generate Sql script from migration
 > dotnet ef migrations script -s Server -p Infrastructure -o ./database-migration.sql
-
-# Class Diagram
-```mermaid
-	Sport <|-- Team
-	Team <|-- Chart
-	Chart <|-- Player
-	Chart <|-- Position
-	Chart <|-- Team
-```
