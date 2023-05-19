@@ -1,0 +1,38 @@
+version: "3.5"
+services:
+  webApi:
+    image: webapi
+    container_name: webapi
+    hostname: webapi
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development" # debug runs in development mode
+      - "DatabaseSetting:Host=host.docker.internal"
+      - "DatabaseSetting:Port=1431"
+      - "DatabaseSetting:DatabaseName=ChartDepth_Db"
+      - "DatabaseSetting:User=sa"
+      - "DatabaseSetting:Password=access@123"
+      - "ASPNETCORE_URLS=http://+:5000"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - mssql
+    ports:
+      - "5001:5001"
+      - "5000:5000"
+      - "8080:80"
+
+  mssql:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    container_name: mssql
+    hostname: mssql
+    environment:
+        - SA_PASSWORD=access@123
+        - ACCEPT_EULA=YES
+    restart: unless-stopped
+    ports:
+      - "1431:1433"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./Database-init.sql:/var/opt/Database-init.sql

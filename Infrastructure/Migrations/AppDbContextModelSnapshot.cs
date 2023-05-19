@@ -44,6 +44,16 @@ namespace Infrastructure.Migrations
                     b.HasIndex("PositionId");
 
                     b.ToTable("Charts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0323dab0-4be8-4db0-a28e-79f41138c3ea"),
+                            Depth = 0,
+                            Group = "Offense",
+                            PlayerNumber = 1,
+                            PositionId = "OLB"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Player", b =>
@@ -60,6 +70,14 @@ namespace Infrastructure.Migrations
                     b.HasKey("Number");
 
                     b.ToTable("Players");
+
+                    b.HasData(
+                        new
+                        {
+                            Number = 1,
+                            Name = "Test Player",
+                            TeamId = 0
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Position", b =>
@@ -73,6 +91,13 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Positions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "OLB",
+                            Name = "OLB"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Sport", b =>
