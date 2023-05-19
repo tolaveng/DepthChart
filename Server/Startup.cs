@@ -1,6 +1,7 @@
 using Application.IRepository;
 using Application.Mapper;
 using Application.Services;
+using FluentValidation;
 using Infrastructure.Database;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Server.Models;
 using System;
 using System.Reflection;
 
@@ -38,6 +40,11 @@ namespace Server
             services.AddScoped<IChartRepository, ChartRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IDepthChartService, DepthChartService>();
+
+            services.AddScoped<IValidator<PlayerRequest>, PlayerValidator>();
+            services.AddScoped<IValidator<ChartRequest>, ChartRequestValidator>();
+            services.AddScoped<IValidator<ChartRemoveRequest>, ChartRemoveValidator>();
+            
 
             services.AddControllers()
                 .AddNewtonsoftJson(opt =>

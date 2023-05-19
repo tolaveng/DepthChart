@@ -18,7 +18,15 @@
 > dotnet run --project Server/Server.csproj
 ```
 - We can test the Api endpoints using OpenApi
-https://localhost:5001/Swagger or http://localhost:5000/swagge
+https://localhost:5001/Swagger or http://localhost:5000/swagger
+
+Get Full Depth Chart
+https://localhost:5001/api/getFullDepthChart
+
+Get Backup
+https://localhost:5001/api/getBackups?position=[POSITION]&playerNumber=[PLAYER NUMBER]
+
+https://localhost:5001/api/getBackups?position=QB&playerNumber=1
 
 ## Start Console client
 ```sh

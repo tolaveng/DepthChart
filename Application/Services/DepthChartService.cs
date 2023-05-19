@@ -100,7 +100,7 @@ namespace Application.Services
             if (chart == null) return null;
 
             var result = await _chartRepo.DeleteAsync(chart.Id);
-            return result ? player : null;
+            return result ? _mapper.Map<PlayerDto>(chart.Player) : null;
         }
     }
 }

@@ -68,7 +68,7 @@ namespace Infrastructure.Repository
 
         public async Task<Chart> GetByPlayerAndPositionAsync(int playerNumber, string position, string group)
         {
-            return await _chartDb.FirstOrDefaultAsync(x => 
+            return await _chartDb.Include(x => x.Player).FirstOrDefaultAsync(x => 
                 x.PositionId.ToUpper() == position.ToUpper() &&
                 x.PlayerNumber == playerNumber &&
                 x.Group == group);
