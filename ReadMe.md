@@ -21,6 +21,7 @@
 ```sh
 > docker exec mssql sh -c "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P access@123 -i /var/opt/Database-init.sql"
 ```
+    **If you cannot create the database, it can be done manualy using "Database-init.sql" in the solution directory, using SQL Management Tool or Sqlcmd.**
 
 - Open the OpenApi Swagger to test the application
 i.e:
@@ -131,3 +132,11 @@ i.e: http://localhost:5000/swagger/index.html
 - generate Sql script from migration
 > dotnet ef migrations script -s Server -p Infrastructure -o ./database-migration.sql
 
+# Class Diagram
+```mermaid
+	Sport <|-- Team
+	Team <|-- Chart
+	Chart <|-- Player
+	Chart <|-- Position
+	Chart <|-- Team
+```
