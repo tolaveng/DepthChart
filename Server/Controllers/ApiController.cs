@@ -59,13 +59,18 @@ namespace Server.Controllers
         [Produces("text/plain")]
         public async Task<IActionResult> GetBackups([FromQuery] string position, [FromQuery] int playerNumber)
         {
-            if (string.IsNullOrWhiteSpace(position) || playerNumber == 0)
+            if (string.IsNullOrWhiteSpace(position) || playerNumber <= 0)
             {
-                return BadRequest("Position and Player Number are required");
+                return BadRequest("Position and Player Number are invalid");
             }
             var playerDto = new PlayerDto { Number = playerNumber };
             var results = await _depthChartService.GetBackupsAsync(position, playerDto);
-            return Ok(formatChart(results));
+            var text = new StringBuilder();
+            foreach (var result in results)
+            {
+                text.AppendLine($"#{result.PlayerNumber} - {result.Player.Name}");
+            }
+            return Ok(text.ToString());
         }
 
         [HttpPost("getBackups")]
@@ -107,7 +112,7 @@ namespace Server.Controllers
             }
             var playerDto = new PlayerDto { Number = request.PlayerNumber };
             var result = await _depthChartService.RemovePlayerFromDepthChartAsync(request.Position, playerDto);
-            if (result == null) return Ok($"Player number {request.PlayerNumber} at position {request.Position} not found");
+            if (result == null) return Ok("");
             return Ok($"#{result.Number} - {result.Name}");
         }
 
