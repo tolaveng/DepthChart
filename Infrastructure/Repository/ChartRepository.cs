@@ -100,6 +100,12 @@ namespace Infrastructure.Repository
             }
         }
 
+        public async Task<bool> RemoveAllAsync()
+        {
+            await _dbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE [Charts]");
+            return true;
+        }
+
         public async Task ShiftDepthAsync(string position, string group, int depth)
         {
             var charts = await _chartDb

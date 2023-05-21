@@ -19,7 +19,7 @@ namespace Infrastructure.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Chart>().HasOne(x => x.Player).WithMany(x => x.Charts).HasForeignKey(x => x.PlayerNumber);
+            modelBuilder.Entity<Chart>().HasOne(x => x.Player).WithMany(x => x.Charts).HasForeignKey(x => x.PlayerNumber).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Chart>().HasOne(x => x.Position).WithMany().HasForeignKey(x => x.PositionId);
 
             modelBuilder.ApplyConfiguration(new SportSeeder());

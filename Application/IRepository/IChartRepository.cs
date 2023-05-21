@@ -17,5 +17,7 @@ namespace Application.IRepository
         Task ShiftDepthAsync(string position, string group, int depth);
         Task<IEnumerable<Chart>> GetBackupsAsync(string position, int playerNumber, string group);
         Task<Chart> GetByPlayerAndPositionAsync(int playerNumber, string position, string group);
+
+        Task<bool> RemoveAllAsync();
     }
 }
