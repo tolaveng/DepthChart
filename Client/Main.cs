@@ -31,7 +31,8 @@ namespace Client
                 {
                     AppConsole.Error(ex);
                 }
-                Console.WriteLine("Press any key to continue.");
+                Console.WriteLine("");
+                Console.WriteLine("Operation Completed. Press any key to continue.");
                 Console.ReadKey();
                 option = GetOption();
             }
@@ -82,10 +83,52 @@ namespace Client
                     Console.WriteLine(removed);
                     break;
 
-                case 99:
+                case 100:
+                    AppConsole.Warns("You are about to add sample data to the depth chart");
+                    var yes = AppConsole.Confirm("Are you sure to add sample data? (y): ");
+                    if (!yes) break;
+                    await AddSampleData();
+                    break;
+
+                case 101:
+                    AppConsole.Warns("You are about to remove all data from the depth chart");
+                    var sure = AppConsole.Confirm("Are you sure to continue? (y): ");
+                    if (!sure) break;
+                    Console.Clear();
+                    Console.WriteLine("removing all...");
+                    await _depthChart.RemoveAll();
+                    Console.WriteLine("All data have been removed");
+                    break;
+
+                case 111:
                     Console.Clear();
                     break;
             }
+        }
+
+        private async Task AddSampleData()
+        {
+            var tomBrady = new Player(12, "Tom Brady");
+            var blainGabbert = new Player(11, "Blaine Gabbert");
+            var kyleTrask = new Player(2, "Kyle Trask");
+
+            var mikeEvans = new Player(13, "Mike Evans");
+            var jaelonDarden = new Player(1, "Jaelon Darden");
+            var scottMiller = new Player(10, "Scott Miller");
+
+
+            Console.Clear();
+            Console.WriteLine("adding sample data...");
+
+            await _depthChart.AddPlayerToDepthChart("QB", tomBrady, 0);
+            await _depthChart.AddPlayerToDepthChart("QB", blainGabbert, 1);
+            await _depthChart.AddPlayerToDepthChart("QB", kyleTrask, 2);
+
+            await _depthChart.AddPlayerToDepthChart("LWR", mikeEvans, 0);
+            await _depthChart.AddPlayerToDepthChart("LWR", jaelonDarden, 1);
+            await _depthChart.AddPlayerToDepthChart("LWR", scottMiller, 2);
+
+            Console.WriteLine("Finish add sample data");
         }
 
         private string InputPosition()
@@ -162,7 +205,9 @@ namespace Client
                 {2, "2. Get Backup Player"},
                 {3, "3. Add Player to chart"},
                 {4, "4. Remove Player from chart"},
-                {99, "99. Clear Console"},
+                {100, "100. Add sample Data to depth chart"},
+                {101, "101. Remove all Data from depth chart"},
+                {111, "111. Clear Console"},
                 {0, "0. Exit"},
             };
 

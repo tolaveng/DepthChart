@@ -94,6 +94,19 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<ChartDto>>(charts);
         }
 
+        public async Task<bool> RemoveAllFromDepthChartAsync()
+        {
+            try
+            {
+                await _chartRepo.RemoveAllAsync();
+                await _playerRepo.RemoveAllAsync();
+                return true;
+            } catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public async Task<PlayerDto> RemovePlayerFromDepthChartAsync(string position, PlayerDto player)
         {
             var chart = await _chartRepo.GetByPlayerAndPositionAsync(player.Number, position, DefaultConstants.DefaultGroup);

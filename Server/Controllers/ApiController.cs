@@ -93,7 +93,7 @@ namespace Server.Controllers
             var playerDto = new PlayerDto { Number = request.Player.Number, Name = request.Player.Name };
             var result = await _depthChartService.AddPlayerToDepthChartAsync(request.Position, playerDto, request.Depth);
             if (result) {
-                return Ok("Player added");
+                return Ok("OK");
             } else
             {
                 return BadRequest("Cannot add player");
@@ -116,6 +116,20 @@ namespace Server.Controllers
             if (result == null) return Ok("");
             return Ok($"#{result.Number} - {result.Name}");
         }
+
+
+        [HttpDelete("removeAllDepthChart")]
+        public async Task<IActionResult> removeAllDepthChart([FromQuery] bool sure)
+        {
+            if (!sure)
+            {
+                return BadRequest("You not sure to remove all data :)");
+            }
+            var result = await _depthChartService.RemoveAllFromDepthChartAsync();
+            if (result) return Ok("");
+            return BadRequest("Something went wrong.");
+        }
+
 
 
         private string formatChart(IEnumerable<ChartDto> results)

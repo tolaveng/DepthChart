@@ -60,6 +60,12 @@ namespace Infrastructure.Repository
             }
         }
 
+        public async Task<bool> RemoveAllAsync()
+        {
+            await _dbContext.Database.ExecuteSqlRawAsync("DELETE FROM [Players]");
+            return true;
+        }
+
         public async Task<bool> UpdateAsync(Player player)
         {
             try

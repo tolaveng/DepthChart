@@ -11,5 +11,7 @@ namespace Application.IRepository
         Task<bool> InsertAsync(Player player);
         Task<bool> UpdateAsync(Player player);
         Task<bool> DeleteAsync(int playerNumber);
+
+        Task<bool> RemoveAllAsync();
     }
 }

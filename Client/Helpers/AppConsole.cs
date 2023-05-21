@@ -9,15 +9,11 @@ namespace Client.Helpers
 {
     public static class AppConsole
     {
-        public static void Warns(IEnumerable<string> errors)
+        public static void Warns(string message)
         {
-            Console.WriteLine("");
             var defaultColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            foreach (var error in errors)
-            {
-                Console.WriteLine(error);
-            }
+            Console.WriteLine(message);
             Console.ForegroundColor = defaultColor;
         }
 
@@ -40,6 +36,14 @@ namespace Client.Helpers
                 Errors(new[] { "Have you run the Server Web API?" });
             }
             Errors(new[] {ex.Message});
+        }
+
+        public static bool Confirm(string message)
+        {
+            Console.Write(message);
+            var ln = Console.ReadLine();
+            if (ln.ToUpper() == "Y" || ln.ToUpper() == "YES") return true;
+            return false;
         }
     }
 }

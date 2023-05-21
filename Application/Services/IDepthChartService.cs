@@ -10,5 +10,7 @@ namespace Application.Services
         Task<PlayerDto> RemovePlayerFromDepthChartAsync(string position, PlayerDto player);
         Task<IEnumerable<ChartDto>> GetBackupsAsync(string position, PlayerDto player);
         Task<IEnumerable<ChartDto>> GetFullDepthChartAsync();
+
+        Task<bool> RemoveAllFromDepthChartAsync();
     }
 }

@@ -65,5 +65,10 @@ namespace Client
             if (_httpClient != null) _httpClient.Dispose();
         }
 
+        public async Task RemoveAll()
+        {
+            var response = await _httpClient.DeleteAsync($"/api/removeAllDepthChart?sure=true");
+            response.EnsureSuccessStatusCode();
+        }
     }
 }

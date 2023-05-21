@@ -13,5 +13,7 @@ namespace Client
         Task<string> GetBackups(string position, Player player);
         Task<bool> AddPlayerToDepthChart(string position, Player player, int? depth);
         Task<string> RemovePlayerFromDepthChart(string position, Player player);
+
+        Task RemoveAll();
     }
 }
