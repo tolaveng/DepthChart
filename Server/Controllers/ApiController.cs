@@ -55,9 +55,9 @@ namespace Server.Controllers
             return Ok(results.Select(ChartResponse.FromData));
         }
 
-        [HttpGet("getBackups")]
+        [HttpGet("getBackups/{position}/{playerNumber:int}")]
         [Produces("text/plain")]
-        public async Task<IActionResult> GetBackups([FromQuery] string position, [FromQuery] int playerNumber)
+        public async Task<IActionResult> GetBackups(string position, int playerNumber)
         {
             if (string.IsNullOrWhiteSpace(position) || playerNumber <= 0)
             {
@@ -101,9 +101,10 @@ namespace Server.Controllers
         }
 
 
-        [HttpDelete("removePlayerFromDepthChart")]
-        public async Task<IActionResult> removePlayerFromDepthChart([FromBody] ChartRemoveRequest request)
+        [HttpDelete("removePlayerFromDepthChart/{position}/{playerNumber:int}")]
+        public async Task<IActionResult> removePlayerFromDepthChart(string position, int playerNumber)
         {
+            var request = new ChartRemoveRequest(position, playerNumber);
             var validate = _chartRemoveValidator.Validate(request);
             if (!validate.IsValid)
             {

@@ -1,7 +1,7 @@
 # Code Challenge
     This project demonstrate how to use .Net,
-    - a Server is a REST Api that allows to manipulate player and the depth chart.
-    - a console application (NOT IMPLEMENT YET) to allow user to add/remove/display the depth chart.
+    - a Server is a REST Api, provides services end-points to manipulate data of players and depth chart.
+    - a console application to consume the Web API, allows user to add/remove/display the depth chart.
     
 # Run Project
 	We can run the project in Docker or dotnet CLI
@@ -51,13 +51,15 @@ i.e:
 i.e: http://localhost:5000/swagger/index.html
 
 
-# Expose Api Endpoints
+# Expose Api End-points
 - Get full depth chart
-    http://localhost:5000/api/getFullDepthChart
+    - Get: http://localhost:5000/api/getFullDepthChart
 
 - Get backup depth chart
-    http://localhost:5000/api/getBackups?position=[POSITION]&playerNumber=[PLAYER_NUMBER]
-    i.e http://localhost:5000/api/getBackups?position=OLB&playerNumber=1
+    - Get: http://localhost:5000/api/getBackups/[POSITION]/[PLAYER_NUMBER]
+    ```sh
+		https://localhost:5001/api/getBackups/OLB/1
+	```
 
 - Add a player to depth chart
     - Post: http://localhost:5000/api/addPlayerToDepthChart
@@ -75,12 +77,10 @@ i.e: http://localhost:5000/swagger/index.html
     _depth is optional_
     
 - Remove a player from depth chart by the player number
-    - Delete: http://localhost:5000/api/removePlayerFromDepthChart
-    - Body:
+    - Delete: http://localhost:5000/api/removePlayerFromDepthChart/[POSTION]/[PLAYER_NUMBER]
     ```sh
     {
-        "position": "LT",
-        "playerNumber": 2
+        https://localhost:5001/api/removePlayerFromDepthChart/LT/1
     }
     ```
 
